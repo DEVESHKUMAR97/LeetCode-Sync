@@ -1,15 +1,15 @@
 class Solution {
-    int bfs(set<vector<int>>& blockedSet, vector<int>& source, vector<int>& target) {
+    int maxLevels;
+    int bfs(unordered_map<int, unordered_set<int>>& blockedSet, vector<int>& source, vector<int>& target) {
         int n, m;
         n = m = 1e6;
-        int maxLevels = blockedSet.size()+1;
 
         vector<vector<int> > directions {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
         queue<vector<int>> q;
         q.push(source);
-        set<vector<int>> vis;
-        vis.insert(source);
+        unordered_map<int, unordered_set<int>> vis;
+        vis[source[0]].insert(source[1]);
 
         int level;
         for(level = 0; level <= maxLevels && q.size() > 0; level++) {
@@ -22,9 +22,9 @@ class Solution {
                     int vRow = u[0] + directions[i][0];
                     int vCol = u[1] + directions[i][1];
                     vector<int> v {vRow, vCol};
-                    if(vRow >= 0 && vRow < n && vCol >= 0 && vCol < m && !blockedSet.count(v) && !vis.count(v)) {
+                    if(vRow >= 0 && vRow < n && vCol >= 0 && vCol < m && (!blockedSet.count(vRow) || !blockedSet[vRow].count(vCol)) && (!vis.count(vRow) || !vis[vRow].count(vCol))) {
                         q.push(v);
-                        vis.insert(v);
+                        vis[vRow].insert(vCol);
                     }
                 }
             }
@@ -41,12 +41,15 @@ public:
     // time: O(b^2) and space O(b^2)
     // b = blocked.size()
     bool isEscapePossible(vector<vector<int>>& blocked, vector<int>& source, vector<int>& target) {
+        maxLevels = blocked.size();
 
-
-        set<vector<int>> blockedSet(blocked.begin(), blocked.end());
+        unordered_map<int, unordered_set<int>> blockedSet;
+        for(vector<int>& b: blocked) {
+            blockedSet[b[0]].insert(b[1]);
+        }
 
         int ans1 = bfs(blockedSet, source, target);
-        // cout << ans1 << endl;
+        cout << ans1 << endl;
         if(ans1 == -2) return true; // reached to target while running bfs
         if(ans1 == -1) return false; // source trapped in cycle
 
