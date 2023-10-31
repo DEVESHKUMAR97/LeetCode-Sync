@@ -1,6 +1,8 @@
 class RLEIterator {
     deque<pair<int, int> > nums;
 public:
+    // Approach 1:
+    // O(n) for constructor
     RLEIterator(vector<int>& encoding) {
         for(int i = 0; i < encoding.size(); i += 2) {
             if(encoding[i] != 0) {
@@ -9,6 +11,8 @@ public:
         }
     }
     
+
+    // O(n) for next call and O(1) amortized
     int next(int n) {
         while(nums.size() > 0 && nums.front().first < n) {
             n -= nums.front().first;
