@@ -2,7 +2,7 @@ class Solution {
     int bfs(set<vector<int>>& blockedSet, vector<int>& source, vector<int>& target) {
         int n, m;
         n = m = 1e6;
-        int maxLevels = blockedSet.size();
+        int maxLevels = blockedSet.size()+1;
 
         vector<vector<int> > directions {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
