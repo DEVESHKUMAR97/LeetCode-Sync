@@ -1,43 +1,56 @@
 class AuthenticationManager {
+
+private:
+    struct compare
+    {
+        bool operator()(pair<string, int> p1, pair<string, int> p2)
+        {
+            return p1.second > p2.second;
+        }
+    };
+    
+    int ttl;
+    unordered_map<string, int> ump;
+    priority_queue<pair<string, int>, vector<pair<string, int>>, compare> pq;
+
 public:
-    unordered_map<string, int>mp;
-    int time= 0;
-    AuthenticationManager(int timeToLive) {
-        time= timeToLive;
+    AuthenticationManager(int timeToLive) 
+    {
+        ttl = timeToLive;
     }
-    
-    void generate(string tokenId, int currentTime) {
-        mp[tokenId]= currentTime + time;// This will give you our expiry time at which we will be logged out from the site.
+
+    void generate(string tokenId, int currentTime) 
+    {
+        ump[tokenId] = currentTime + ttl;
+        pq.push({tokenId, currentTime + ttl});
     }
-    
-    void renew(string tokenId, int currentTime) {
-        auto it= mp.find(tokenId); //check if the token is available or not, if it's not available return.
-        if(it==mp.end())
-        return;
-        else{
-        if(mp[tokenId]>currentTime) // if the token is available and it's expiry time is greater than current time renew and update the expiry time
+
+    void renew(string tokenId, int currentTime) 
+    {
+        if(ump.find(tokenId) != ump.end() && ump[tokenId] > currentTime)
         {
-            mp[tokenId]= currentTime + time;  // update the expiry time by adding the current time with timeToLive value i.e 5 here.
-        }
+            ump[tokenId] = currentTime + ttl;
         }
     }
-    
-    int countUnexpiredTokens(int currentTime) {
-        int total=0;
-        for(auto x:mp) // iterate through every token and check if any token has it's expiry time greater than currentTime, if yes do total= total+1, it is simply calculating the remaining time here.
+
+    int countUnexpiredTokens(int currentTime) 
+    {
+        while (!pq.empty()) 
         {
-            // cout<<x.second<<" ";
-            if(x.second>currentTime)
-            total++;
+            int originalExpiryTime = pq.top().second;
+            string tokenId = pq.top().first;
+            if (originalExpiryTime > currentTime)
+            {
+                break;
+            }
+
+            pq.pop();
+            int actualExpiryTime = ump[tokenId];
+            if (actualExpiryTime > currentTime)
+            {
+                pq.push({tokenId,actualExpiryTime});
+            }
         }
-        return total;
+        return pq.size();
     }
 };
-
-/**
- * Your AuthenticationManager object will be instantiated and called as such:
- * AuthenticationManager* obj = new AuthenticationManager(timeToLive);
- * obj->generate(tokenId,currentTime);
- * obj->renew(tokenId,currentTime);
- * int param_3 = obj->countUnexpiredTokens(currentTime);
- */
