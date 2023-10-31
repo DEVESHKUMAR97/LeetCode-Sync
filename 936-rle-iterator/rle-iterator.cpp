@@ -1,28 +1,52 @@
+#define ll long long
 class RLEIterator {
-    deque<pair<int, int> > nums;
+    vector<ll> prefixCount;
+    vector<ll> nums;
+    ll targetNumPosition;
+    ll currNumLeftIdx;
 public:
-    // Approach 1:
+    // Approach 2: Using binary search
     // O(n) for constructor
     RLEIterator(vector<int>& encoding) {
+        targetNumPosition = 0;
+        currNumLeftIdx = 0;
         for(int i = 0; i < encoding.size(); i += 2) {
             if(encoding[i] != 0) {
-                nums.push_back({encoding[i], encoding[i+1]});
+                if(prefixCount.size() == 0) {
+                    prefixCount.push_back(encoding[i]);
+                } else {
+                    prefixCount.push_back(encoding[i] + prefixCount.back()); 
+                }
+                nums.push_back(encoding[i+1]);
             }
         }
     }
     
 
-    // O(n) for next call and O(1) amortized
+    // O(log(n)) for next call and O(1) amortized
     int next(int n) {
-        while(nums.size() > 0 && nums.front().first < n) {
-            n -= nums.front().first;
-            nums.pop_front();
+        targetNumPosition += n;
+        int low = currNumLeftIdx;
+        int high = nums.size() - 1;
+        int ansIdx = -1;
+        while(low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if(prefixCount[mid] >= targetNumPosition) {
+                ansIdx = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
         }
-        if(nums.size() == 0) return -1;
-        nums.front().first -= n;
-        int ans = nums.front().second;
-        if(nums.front().first == 0) nums.pop_front();
-        return ans;
+        if(ansIdx == -1) {
+            currNumLeftIdx = nums.size();
+            return -1;
+        }
+
+        currNumLeftIdx = ansIdx;
+        return nums[ansIdx];
+
     }
 };
 
