@@ -160,14 +160,14 @@ public:
     
 //     for(int i = 0; i < n; i++) {
 //       for(int j = 0; j < m; j++) {
-//         if(vis[i][j] == false) {
+//         if(vis[i][j] == false) { // mistake 5  && grid[i][j] == 1 must be there
 //           int size = dfs(i, j, i, j);
 //           sizeOfComponent[make_pair(i, j)] = size;
 //         }
 //       }
 //     }
       
-//       int ans = 0; // mistake 1: logical  fail forr all 1's
+//       int ans = 0; // mistake 1: logical  fail forr all 1's, we should also consider original size of connected components
       
 //       int currAns = 0;
      
@@ -248,3 +248,13 @@ public:
   
   
   
+// Hi Shirisha,
+
+// I hope all is well. I know how busy you probably are, but We recently discussed about the software engineering roles. So, I wanted to check in on your decision timeline. 
+// I am excited about the opportunity and looking for response.
+
+// Please let me know if it would be helpful for me to provide any additional information.
+
+// I look forward to hearing from you.
+
+// Devesh
