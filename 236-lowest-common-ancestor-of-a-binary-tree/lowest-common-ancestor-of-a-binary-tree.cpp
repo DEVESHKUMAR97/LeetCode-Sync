@@ -13,6 +13,7 @@ public:
         TreeNode* lca = nullptr;
         function<bool(TreeNode*, TreeNode*, TreeNode*)> find = [&](TreeNode* root, TreeNode* p, TreeNode* q) {
             if(root == nullptr) return false;
+            if(lca != nullptr) return false;
 
             bool isCurr = ((root == p) || (root == q));
 
