@@ -41,7 +41,7 @@ public:
         for(int i = 0; i < n; i++) {
             for(int j = i; j < 2 * n; j++) {
                 if(clockWiseDistance[i][ring[j % n]-'a'] == INT_MAX) {
-                    clockWiseDistance[i][ring[j % n]-'a'] = (j - i + n + n ) % n;
+                    clockWiseDistance[i][ring[j % n]-'a'] = (j - i + n) % n;
                 }
             }
         }
