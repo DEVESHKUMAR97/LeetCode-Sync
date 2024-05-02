@@ -7,8 +7,9 @@ public:
         for(int i = n - 1; i >= 0; i--) {
             if(heights[i] > mx) {
                 ans.push_back(i);
+                mx = heights[i];
             }
-            mx = max(mx, heights[i]);
+            // mx = max(mx, heights[i]);
         }
         reverse(ans.begin(), ans.end());
         return ans;
