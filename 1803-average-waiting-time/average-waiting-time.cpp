@@ -1,6 +1,7 @@
 class Solution {
 public:
     double averageWaitingTime(vector<vector<int>>& customers) {
+        ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
         int chefBusyTill = 0;
         double wait = 0;
         for(auto& c: customers) {
