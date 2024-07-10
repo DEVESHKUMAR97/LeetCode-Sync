@@ -1,30 +1,30 @@
 class Vector2D {
-    vector<vector<int>> vec;
-    int row, col, n;
 public:
-    Vector2D(vector<vector<int>>& vec): vec(vec){
-        row = 0;
-        col = 0;
-        n = vec.size();
+    vector<vector<int>> vec;
+    int row{}, col{};
+    int n{};
+    Vector2D(vector<vector<int>>& vec): vec(vec) {
+        this->n = vec.size();
+        while(row < n && vec[row].size() == 0) {
+            row++;
+        }
     }
     
     int next() {
-        if(hasNext()) {
-            return vec[row][col++];
+        int res = vec[row][col];
+        if (col == vec[row].size() - 1) {
+            row++; col = 0;
+            while(row < n && vec[row].size() == 0) {
+                row++;
+            }
+        } else {
+            col++;
         }
-        return -1;
-        
+        return res;
     }
     
     bool hasNext() {
-        if(row < n && col < vec[row].size()) return true;
-        while(row < n && col >= vec[row].size()) {
-            col = 0;
-            row++;
-        }
-
         return row < n;
-        
     }
 };
 
@@ -34,4 +34,3 @@ public:
  * int param_1 = obj->next();
  * bool param_2 = obj->hasNext();
  */
-
